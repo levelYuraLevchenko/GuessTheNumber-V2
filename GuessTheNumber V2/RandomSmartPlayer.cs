@@ -7,17 +7,14 @@ using System.Threading.Tasks;
 
 namespace GuessTheNumber_V2
 {
-    static class RandomSmartPlayer
+    class RandomSmartPlayer : Player
     {
-        public static string Name = "RandomSmartPlayer";
         public static int[] LocalArray = new int[0];
-        public static bool Win { get; set; }
 
-        public static void DoMove()
+        public RandomSmartPlayer(string name) : base(name) { }
+
+        public override void DoMove()
         {
-            while (!Win)
-            {
-                Thread.Sleep(100);
                 int Rand = Game.rand.Next(Game.MinValue, Game.MaxValue + 1);
 
                 for (var i = 0; i < LocalArray.Length; i++)
@@ -33,24 +30,18 @@ namespace GuessTheNumber_V2
                 {
                     if (Game.EnteredNumber[i] == Game.WinValue)
                     {
-                        Console.WriteLine(Name + " can not win, because there is already a winner!");
-                        Win = true;
+                        Game.Win = true;
                     }
                 }
 
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("RSPl: " + Rand);
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(Name + " " + Rand);
                 AddEnterdNumberInLocalArray(Rand);
                 Game.AddEnterdNumberInArray(Rand);
                 if (Rand == Game.WinValue)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(Name + " WIN({0}) ", Rand);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Win = true;
+                    Game.Win = true;
                 }
-            }
         }
 
         public static void AddEnterdNumberInLocalArray(int number)

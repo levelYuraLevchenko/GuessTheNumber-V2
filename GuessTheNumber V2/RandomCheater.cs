@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace GuessTheNumber_V2
 {
-    static class RandomCheater
+    class RandomCheater : Player
     {
-        public static string Name = "RandomCheater";
-        public static bool Win { get; set; }
 
-        public static void DoMove()
+        public RandomCheater(string name) : base(name) { }
+      
+        public override void DoMove()
         {
-            while (!Win)
-            {
-                Thread.Sleep(100);
                 int Rand = Game.rand.Next(Game.MinValue, Game.MaxValue + 1);
 
                 for (var i = 0; i < Game.EnteredNumber.Length; i++)
@@ -31,23 +28,17 @@ namespace GuessTheNumber_V2
                     }
                     else
                     {
-                        Console.WriteLine(Name + " can not win, because there is already a winner!");
-                        Win = true;
+                        Game.Win = true;
                     }
                 }
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("RCh: " + Rand);
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(Name + " " + Rand);
                 Game.AddEnterdNumberInArray(Rand);
                 if (Rand == Game.WinValue)
                 {
-                    Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine(Name + " WIN({0}) ", Rand);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Win = true;
+                    Game.Win = true;
                 }
-            }
         }
     }
 }

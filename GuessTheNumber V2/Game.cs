@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GuessTheNumber_V2
 {
-    static class Game
+    class Game
     {
         static object locker = new object();
 
@@ -14,6 +15,8 @@ namespace GuessTheNumber_V2
         public static int MinValue { get; set; }
         public static int MaxValue { get; set; }
         public static int WinValue { get; set; }
+        public static bool Win { get; set; }
+
         public static Random rand = new Random();
 
         public static void SetValue()
@@ -22,12 +25,6 @@ namespace GuessTheNumber_V2
             MaxValue = int.Parse(Console.ReadLine());
             WinValue = int.Parse(Console.ReadLine());
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green; Console.Write("| " + DiligentPlayer.Name + " 1st |");
-            Console.ForegroundColor = ConsoleColor.Blue; Console.Write("| " + RandomPlayer.Name + " 2nd |");
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.Write("| " + RandomSmartPlayer.Name + " 3rd |");
-            Console.ForegroundColor = ConsoleColor.Red; Console.Write("| " + DiligentCheater.Name + " 4th |");
-            Console.ForegroundColor = ConsoleColor.Magenta; Console.Write("| " + RandomCheater.Name + " 5th |");
-            Console.ForegroundColor = ConsoleColor.White; Console.WriteLine(); Console.WriteLine();
             Console.WriteLine("Range: from {0} to {1}, winValue = {2}", MinValue, MaxValue, WinValue);
             Console.WriteLine();
         }
@@ -43,6 +40,27 @@ namespace GuessTheNumber_V2
                 }
                 tmpArray[EnteredNumber.Length] = number;
                 EnteredNumber = tmpArray;
+            }
+        }
+
+             Player[] players = new Player[]
+             {
+                new DiligentPlayer("DiligentPlayer"),
+                new RandomPlayer("RandomPlayer"),
+                new RandomSmartPlayer("RandomSmartPlayer"),
+                new RandomCheater("RandomCheater"),
+                new DiligentCheater("DiligentCheater")
+             };
+
+
+        public void Step()
+        {
+            while (!Win)
+            {
+                for (var i = 0; i < players.Length; i++)
+                {
+                    new Thread(players[i].DoMove).Start();
+                }
             }
         }
     }

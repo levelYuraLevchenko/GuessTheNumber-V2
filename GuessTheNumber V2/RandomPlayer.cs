@@ -7,39 +7,29 @@ using System.Threading.Tasks;
 
 namespace GuessTheNumber_V2
 {
-    static class RandomPlayer
+    class RandomPlayer : Player
     {
-        public static string Name = "RandomPlayer";
-        public static bool Win { get; set; }
+        public RandomPlayer(string name) : base(name) { }
 
-        public static void DoMove()
+        public override void DoMove()
         {
-            while(!Win)
-            {
-                Thread.Sleep(100);
                 int Rand = Game.rand.Next(Game.MinValue, Game.MaxValue + 1);
 
                 for (var i = 0; i < Game.EnteredNumber.Length; i++)
                 {
                     if (Game.EnteredNumber[i] == Game.WinValue)
                     {
-                        Console.WriteLine(Name + " can not win, because there is already a winner!");
-                        Win = true;
+                    Game.Win = true;
                     }
                 }
 
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("RPl: " + Rand);
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(Name + " " + Rand);
                 Game.AddEnterdNumberInArray(Rand);
                 if (Rand == Game.WinValue)
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine(Name + " WIN({0}) ", Rand);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Win = true;
+                    Game.Win = true;
                 }
-            }
         }
         
     }
